@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Map Viewer</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 1200px;
+    padding: 10px;
+  }
+
+  .viewer {
+    position: relative;
+    width: 100%;
+    height: 80vh;
+    overflow: hidden;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.05);
+  }
+
+  .viewer img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    transform-origin: center;
+    max-width: none;
+    user-select: none;
+    cursor: grab;
+  }
+
+  .toolbar {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+  }
+
+  .toolbar button {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    cursor: pointer;
+  }
+
+  @media (max-width: 600px) {
+    .toolbar button { padding: 14px; font-size: 16px; }
+  }
+  .marquee {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-bottom: 10px;
+  }
+
+  .marquee span {
+    display: inline-block;
+    padding-left: 100%;
+    animation: scrollText 12s linear infinite;
+    font-size: 14px;
+    opacity: 0.8;
+  }
+
+  @keyframes scrollText {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+  }
+</style>
+</head>
+<body>
+    <div class="marquee">
+        <span><h2>📍 Please mindful of your surrounding when using the map</h2></span>
+    </div>
+<div class="container">
+  <div class="viewer" id="viewer">
+    <!-- Built-in map image -->
+    <img id="map" src="capalonga map.jpg" />
+
+    <div class="toolbar">
+      <button onclick="zoom(1.2)">+</button>
+      <button onclick="zoom(0.8)">-</button>
+      <button onclick="rotate(-90)">⟲</button>
+      <button onclick="rotate(90)">⟳</button>
+      <button onclick="resetView()">Reset</button>
+      <button onclick="toggleFullscreen()">⛶</button>
+    </div>
+  </div>
+</div>
+<h2>EMERGENGY HOTLINES</h2>
+<br>
+<p><b>PNP: </b> <a href="tel:+639985985953">0998-598-5953</a> </p>
+<br>
+<p><b>MDRRMO: </b><a href="tel:+639756669350">0975-666-9350</a></p>
+<br>
+<p><b>BFP: </b><a href="tel:+639813946935">0981-394-6935</a>  / <a href="tel:+639209636935">0920-963-6935</a></p>
+<script>
+const map = document.getElementById('map');
+const viewer = document.getElementById('viewer');
+
+let scale = .04;
+let rotation = 0;
+let pos = { x: 0, y: 0 };
+let dragging = false;
+let start = { x: 0, y: 0 };
+
+function updateTransform() {
+  map.style.transform = `translate(-50%, -50%) translate(${pos.x}px, ${pos.y}px) scale(${scale}) rotate(${rotation}deg)`;
+}
+
+function zoom(factor) {
+  scale *= factor;
+  updateTransform();
+}
+
+function rotate(deg) {
+  rotation += deg;
+  updateTransform();
+}
+
+function resetView() {
+  scale = .04;
+  rotation = 0;
+  pos = { x: 0, y: 0 };
+  updateTransform();
+}
+
+function toggleFullscreen() {
+  if (!document.fullscreenElement) viewer.requestFullscreen();
+  else document.exitFullscreen();
+}
+
+// Dragging (desktop + touch)
+viewer.addEventListener('mousedown', (e) => {
+  dragging = true;
+  start = { x: e.clientX - pos.x, y: e.clientY - pos.y };
+});
+
+window.addEventListener('mouseup', () => dragging = false);
+
+window.addEventListener('mousemove', (e) => {
+  if (!dragging) return;
+  pos.x = e.clientX - start.x;
+  pos.y = e.clientY - start.y;
+  updateTransform();
+});
+
+// Touch
+viewer.addEventListener('touchstart', (e) => {
+  const t = e.touches[0];
+  dragging = true;
+  start = { x: t.clientX - pos.x, y: t.clientY - pos.y };
+});
+
+viewer.addEventListener('touchmove', (e) => {
+  const t = e.touches[0];
+  if (!dragging) return;
+  pos.x = t.clientX - start.x;
+  pos.y = t.clientY - start.y;
+  updateTransform();
+});
+
+viewer.addEventListener('touchend', () => dragging = false);
+
+// Scroll zoom
+viewer.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  zoom(e.deltaY < 0 ? 1.1 : 0.9);
+});
+
+// Initialize
+updateTransform();
+</script>
+</body>
+</html>
