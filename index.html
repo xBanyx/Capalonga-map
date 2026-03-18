@@ -148,35 +148,81 @@
     opacity: 1;
   }
 
+  /* RESPONSIVE TOOLBAR - WORKS ON ALL MOBILE DEVICES */
   .toolbar {
     position: absolute;
-    bottom: 20px;
+    bottom: 16px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    gap: 10px;
-    background: rgba(0,0,0,0.9);
-    padding: 16px 20px;
-    border-radius: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(0,0,0,0.92);
+    padding: 12px 16px;
+    border-radius: 24px;
     backdrop-filter: blur(30px);
     box-shadow: 0 20px 40px rgba(0,0,0,0.5);
     z-index: 10;
+    max-width: calc(100vw - 32px);
+    width: fit-content;
+    min-width: 280px;
+  }
+
+  /* Small phones (under 360px) */
+  @media (max-width: 360px) {
+    .toolbar {
+      bottom: 12px;
+      padding: 10px 12px;
+      gap: 6px;
+      border-radius: 20px;
+      min-width: 260px;
+    }
+  }
+
+  /* Extra small phones */
+  @media (max-width: 320px) {
+    .toolbar {
+      bottom: 10px;
+      padding: 8px 10px;
+      gap: 5px;
+      border-radius: 18px;
+      min-width: 240px;
+    }
   }
 
   .toolbar button {
-    width: 56px;
-    height: 56px;
-    border-radius: 16px;
+    flex: 0 0 auto;
+    width: clamp(44px, 5vw, 52px);
+    height: clamp(44px, 5vw, 52px);
+    min-width: 44px;
+    min-height: 44px;
+    max-width: 56px;
+    max-height: 56px;
+    border-radius: 14px;
     border: none;
     background: rgba(255,255,255,0.15);
     color: white;
-    font-size: 20px;
+    font-size: clamp(16px, 2.5vw, 20px);
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
+    touch-action: manipulation;
+  }
+
+  /* Smaller buttons on very small screens */
+  @media (max-width: 360px) {
+    .toolbar button {
+      width: clamp(40px, 4.5vw, 48px);
+      height: clamp(40px, 4.5vw, 48px);
+      min-width: 40px;
+      min-height: 40px;
+      border-radius: 12px;
+      font-size: clamp(15px, 2.2vw, 18px);
+    }
   }
 
   .toolbar button:active {
@@ -266,12 +312,12 @@
     <div class="viewer" id="viewer">
       <img id="mapImage" alt="Capalonga Guide Map">
       <div class="toolbar">
-        <button onclick="zoomIn()">+</button>
-        <button onclick="zoomOut()">-</button>
-        <button onclick="rotateLeft()">⟲</button>
-        <button onclick="rotateRight()">⟳</button>
-        <button onclick="resetMap()">Reset</button>
-        <button onclick="toggleFull()">⛶</button>
+        <button onclick="zoomIn()" title="Zoom In">+</button>
+        <button onclick="zoomOut()" title="Zoom Out">-</button>
+        <button onclick="rotateLeft()" title="Rotate Left">⟲</button>
+        <button onclick="rotateRight()" title="Rotate Right">⟳</button>
+        <button onclick="resetMap()" title="Reset">Reset</button>
+        <button onclick="toggleFull()" title="Fullscreen">⛶</button>
       </div>
     </div>
 
