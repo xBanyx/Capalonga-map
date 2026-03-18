@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Map Viewer</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -24,6 +24,7 @@
   }
 
   .viewer {
+    touch-action: none;
     position: relative;
     width: 100%;
     height: 80vh;
@@ -127,6 +128,7 @@ function updateTransform() {
 
 function zoom(factor) {
   scale *= factor;
+  scale = Math.min(Math.max(0.02, scale), 5);
   updateTransform();
 }
 
@@ -163,21 +165,59 @@ window.addEventListener('mousemove', (e) => {
 });
 
 // Touch
+let lastDistance = null;
+
+// Helper: get distance between 2 fingers
+function getDistance(touches) {
+  const dx = touches[0].clientX - touches[1].clientX;
+  const dy = touches[0].clientY - touches[1].clientY;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
 viewer.addEventListener('touchstart', (e) => {
-  const t = e.touches[0];
-  dragging = true;
-  start = { x: t.clientX - pos.x, y: t.clientY - pos.y };
+  if (e.touches.length === 1) {
+    // Drag
+    const t = e.touches[0];
+    dragging = true;
+    start = { x: t.clientX - pos.x, y: t.clientY - pos.y };
+  } else if (e.touches.length === 2) {
+    // Start pinch
+    dragging = false;
+    lastDistance = getDistance(e.touches);
+  }
 });
 
 viewer.addEventListener('touchmove', (e) => {
-  const t = e.touches[0];
-  if (!dragging) return;
-  pos.x = t.clientX - start.x;
-  pos.y = t.clientY - start.y;
-  updateTransform();
-});
+  e.preventDefault();
 
-viewer.addEventListener('touchend', () => dragging = false);
+  if (e.touches.length === 1 && dragging) {
+    // Drag
+    const t = e.touches[0];
+    pos.x = t.clientX - start.x;
+    pos.y = t.clientY - start.y;
+  } 
+  else if (e.touches.length === 2) {
+    // Pinch zoom
+    const newDistance = getDistance(e.touches);
+
+    if (lastDistance) {
+      const zoomFactor = newDistance / lastDistance;
+      scale *= zoomFactor;
+
+      // Limit zoom (optional but recommended)
+      scale = Math.min(Math.max(0.02, scale), 5);
+    }
+
+    lastDistance = newDistance;
+  }
+
+  updateTransform();
+}, { passive: false });
+
+viewer.addEventListener('touchend', () => {
+  dragging = false;
+  lastDistance = null;
+});
 
 // Scroll zoom
 viewer.addEventListener('wheel', (e) => {
