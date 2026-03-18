@@ -16,41 +16,41 @@
     justify-content: center;
     height: 100vh;
   }
-  #loader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #0f172a;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  transition: opacity 0.4s ease;
-}
 
-.progress-container {
-  width: 200px;
-  height: 6px;
-  background: rgba(255,255,255,0.2);
-  border-radius: 10px;
-  overflow: hidden;
-  margin-bottom: 10px;
-}
 
-.progress-bar {
-  width: 0%;
-  height: 100%;
-  background: white;
-  transition: width 0.2s ease;
-}
 
-  #progress-text {
-  font-size: 14px;
-  opacity: 0.8;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   .container {
     width: 100%;
     max-width: 1200px;
@@ -121,22 +121,25 @@
 </style>
 </head>
 <body>
-  <div id="loader">
-    <div class="progress-container">
-      <div class="progress-bar" id="progress-bar"></div>
-        </div>
-          <p id="progress-text">0%</p>
-        </div>
+
+
+
+
+
+
     <div class="marquee">
         <span><h2>📍 Please mindful of your surrounding when using the map</h2></span>
     </div>
-    
-<div class="container">
 
-  <!-- Built-in map image -->
+<div class="container">
   <div class="viewer" id="viewer">
-    <img id="map" />
-    
+    <!-- Built-in map image -->
+    <img id="map" src="capalonga map.jpg" />
+
+
+
+
+
     <div class="toolbar">
       <button onclick="zoom(1.2)">+</button>
       <button onclick="zoom(0.8)">-</button>
@@ -157,63 +160,63 @@
 
 <script>
 
-const loader = document.getElementById('loader');
-const progressBar = document.getElementById('progress-bar');
-const progressText = document.getElementById('progress-text');
 
-if (contentLength) {
-  const percent = Math.round((receivedLength / contentLength) * 100);
-  progressBar.style.width = percent + "%";
-  progressText.textContent = percent + "%";
-} else {
-  // fallback if no content-length
-  progressBar.style.width = "90%";
-  progressText.textContent = "Loading...";
-}
 
-async function loadImageWithProgress(url) {
-  const response = await fetch(url);
-  const reader = response.body.getReader();
-  const contentLength = response.headers.get('Content-Length');
 
-  let receivedLength = 0;
-  let chunks = [];
 
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
 
-    chunks.push(value);
-    receivedLength += value.length;
 
-    if (contentLength) {
-      const percent = Math.round((receivedLength / contentLength) * 100);
-      progressBar.style.width = percent + "%";
-      progressText.textContent = percent + "%";
-    }
-  }
 
-  // Combine chunks into blob
-  const blob = new Blob(chunks);
-  const imageURL = URL.createObjectURL(blob);
 
-  // Set image source AFTER loading
-  map.src = imageURL;
 
-  // Hide loader
-  setTimeout(() => {
-    loader.style.opacity = "0";
-    setTimeout(() => loader.style.display = "none", 300);
-  }, 300);
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 const map = document.getElementById('map');
 const viewer = document.getElementById('viewer');
 
-// Call it instead of relying on <img src="">
-loadImageWithProgress("capalonga map.jpg");
+
+
 
 let scale = .04;
 let rotation = 0;
