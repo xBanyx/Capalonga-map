@@ -11,7 +11,314 @@
     padding: 0; 
     -webkit-tap-highlight-color: transparent;
   }
-  
+      /* Modal/Popup Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal.active {
+      display: block;
+      opacity: 1;
+    }
+
+    /* SCROLLABLE MODAL */
+    .modal-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      max-width: 95vw;
+      max-height: 95vh;
+      width: 95vw;
+      height: 85vh;
+      max-height: 650px;
+      /* ✅ Taller for scroll */
+      background: rgb(255, 255, 255);
+      border-radius: 24px;
+      overflow-y: auto;
+      /* ✅ VERTICAL SCROLL */
+      -webkit-overflow-scrolling: touch;
+      /* ✅ iOS smooth */
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal.active .modal-content {
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    /* Image stays responsive */
+    .schedule-image {
+      width: 100%;
+      height: 50vh;
+      /* Fixed height */
+      max-height: 350px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      flex-shrink: 0;
+      /* ✅ Don't shrink image */
+    }
+
+    /* Scrollable content area */
+    .modal-body {
+      flex: 1;
+      /* ✅ Takes remaining space */
+      padding: 0 24px 24px;
+      overflow-y: auto;
+    }
+
+    /* Small phones */
+    @media (max-height: 700px) {
+      .modal-content {
+        width: 98vw;
+        height: 92vh;
+      }
+
+      .schedule-image {
+        height: 40vh;
+      }
+    }
+
+    .modal-header {
+      padding: 24px 24px 0;
+    }
+
+    .modal-title {
+      position: sticky;
+      font-size: 24px;
+      font-weight: 700;
+      color: #1C1C1E;
+      margin-bottom: 8px;
+    }
+
+    .modal-description {
+      color: #6E6E73;
+      font-size: 16px;
+      margin-bottom: 24px;
+    }
+
+    .modal-close {
+      position: fixed;
+      /* ✅ FIXED - always on top */
+      top: 20px;
+      right: 20px;
+      z-index: 2001;
+      /* ✅ Above modal content */
+      background: rgba(0, 0, 0, 0.7);
+      border: none;
+      font-size: 28px;
+      color: white;
+      cursor: pointer;
+      padding: 12px 16px;
+      border-radius: 50%;
+      transition: all 0.2s ease;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-close:hover {
+      background: rgba(0, 0, 0, 0.9);
+      transform: scale(1.1);
+    }
+
+    .modal-close:active {
+      transform: scale(0.95);
+    }
+
+    /* Navigation Styles - FIXED & ENHANCED */
+    .nav-container {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      /* Safari support */
+      box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.12);
+      z-index: 1000;
+      padding: 16px 12px;
+      /* Increased padding */
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .nav-tabs {
+      display: flex;
+      justify-content: space-around;
+      max-width: 420px;
+      /* Slightly smaller for better fit */
+      margin: 0 auto;
+      list-style: none;
+      padding: 0 8px;
+      /* Small side padding */
+      gap: 8px;
+      /* Space between tabs */
+    }
+
+    .nav-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      padding: 12px 8px;
+      /* Reduced horizontal padding */
+      min-height: 60px;
+      /* Consistent height */
+      color: #757577;
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      /* Bouncy animation */
+      border-radius: 20px;
+      /* Larger radius */
+      cursor: pointer;
+      position: relative;
+      max-width: none;
+      /* Remove max-width constraint */
+      touch-action: manipulation;
+      /* Better mobile touch */
+    }
+
+    .nav-tab:hover {
+      color: #007AFF;
+      background: rgba(0, 122, 255, 0.12);
+      transform: translateY(-3px);
+    }
+
+    .nav-tab:active {
+      transform: translateY(-1px) scale(0.98);
+      /* Press effect */
+    }
+
+    .nav-icon {
+      font-size: 26px;
+      /* Slightly larger */
+      margin-bottom: 4px;
+      line-height: 1;
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      flex-shrink: 0;
+    }
+
+    .nav-tab:hover .nav-icon {
+      transform: scale(1.15);
+    }
+
+    .nav-tab.active .nav-icon {
+      transform: scale(1.2);
+    }
+
+    .nav-label {
+      font-size: 11px;
+      /* Slightly larger */
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-align: center;
+      line-height: 1.2;
+      opacity: 0.9;
+      transition: opacity 0.2s ease;
+    }
+
+    .nav-tab:hover .nav-label {
+      opacity: 1;
+    }
+
+
+
+    .nav-tab.active .nav-label {
+      opacity: 1;
+    }
+
+
+
+    /* Responsive improvements */
+    @media (max-width: 480px) {
+      .nav-tabs {
+        max-width: 380px;
+        gap: 6px;
+      }
+
+      .nav-tab {
+        padding: 10px 6px;
+        min-height: 56px;
+      }
+
+      .nav-icon {
+        font-size: 24px;
+      }
+
+      .nav-label {
+        font-size: 10px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .nav-container {
+        position: relative;
+        bottom: auto;
+        max-width: 420px;
+        margin: 40px auto 0;
+        border-radius: 28px;
+        padding: 20px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      .nav-tabs {
+        gap: 12px;
+      }
+    }
+
+    /* Prevent text clipping */
+    .nav-tab a {
+      color: inherit;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Haptic feedback for mobile */
+    @media (hover: none) and (pointer: coarse) {
+      .nav-tab:active {
+        background: rgba(0, 122, 255, 0.25);
+      }
+    }
+
+    .page-content {
+      padding-bottom: 110px;
+      padding-top: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .nav-container {
+        position: relative;
+        bottom: auto;
+        max-width: 400px;
+        margin: 40px auto 0;
+        border-radius: 24px;
+      }
+
+      .page-content {
+        padding-bottom: 20px;
+      }
+    }
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
@@ -302,6 +609,45 @@
     </div>
     <div id="progressText">0%</div>
   </div>
+ <!-- Navigation Bar -->
+  <nav class="nav-container">
+    <ul class="nav-tabs">
+      <li class="nav-tab active">
+        <a href="index.html" class="nav-link">
+          <span class="nav-icon">🗺️</span>
+          <span class="nav-label">Map</span>
+        </a>
+      </li>
+      <li class="nav-tab" id="schedule-tab">
+        <a href="#" class="nav-link popup-link">
+          <span class="nav-icon">📅</span>
+          <span class="nav-label">Schedule</span>
+        </a>
+      </li>
+      <li class="nav-tab" id="hotlines-tab">
+        <a href="#hotcalls" class="nav-link scroll-link">
+          <span class="nav-icon">📞</span>
+          <span class="nav-label">Hotlines</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Schedule Popup Modal -->
+  <div id="schedule-modal" class="modal">
+    <div class="modal-content">
+      <button class="modal-close" id="close-modal">&times;</button>
+      <div class="modal-header">
+        <h2 class="modal-title">📅 Mass Schedule</h2>
+        <p class="modal-description">Ito ang mga Schedule ng Misa sa Fiesta</p>
+      </div>
+      <img src="schedule.jpg" alt="">
+      <!--<img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
+             alt="Schedule Calendar" class="schedule-image" 
+             onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPlNjaGVkdWxlIEltYWdlPC90ZXh0Pjwvc3ZnPg=='">
+    -->
+    </div>
+  </div>
 
   <!-- CONTENT -->
   <div class="container" id="mainContent">
@@ -343,6 +689,200 @@
   </div>
 
 <script>
+ // Modal functionality for Schedule popup
+    const scheduleModal = document.getElementById('schedule-modal');
+    const scheduleTab = document.getElementById('schedule-tab');
+    const closeModalBtn = document.getElementById('close-modal');
+
+    scheduleTab?.addEventListener('click', function (e) {
+      e.preventDefault();
+      scheduleModal.classList.add('active');
+      document.body.style.overflow = 'hidden'; // Prevent background scroll
+    });
+
+    closeModalBtn?.addEventListener('click', function () {
+      scheduleModal.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    });
+
+    // Close modal when clicking outside
+    scheduleModal?.addEventListener('click', function (e) {
+      if (e.target === this) {
+        scheduleModal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && scheduleModal.classList.contains('active')) {
+        scheduleModal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      }
+    });
+
+    // Highlight active tab based on current URL
+    document.addEventListener('DOMContentLoaded', function () {
+      const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+      const navLinks = document.querySelectorAll('.nav-link');
+
+      navLinks.forEach(link => {
+        const linkPath = link.getAttribute('href');
+        const parentTab = link.closest('.nav-tab');
+
+        if (linkPath === currentPath) {
+          parentTab.classList.add('active');
+        } else {
+          parentTab.classList.remove('active');
+        }
+      });
+    });
+
+    // Hotlines smooth scroll
+    document.getElementById('hotlines-tab')?.addEventListener('click', function (e) {
+      e.preventDefault();
+      const hotlinesSection = document.getElementById('hotcalls');
+      if (hotlinesSection) {
+        hotlinesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        hotlinesSection.classList.add('visible');
+        document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+        this.closest('.nav-tab').classList.add('active');
+      }
+    });
+
+    // Page link transitions (only for Map)
+    document.querySelectorAll('.nav-link[href$=".html"]').forEach(link => {
+      link.addEventListener('click', function () {
+        document.body.style.opacity = '0.7';
+        setTimeout(() => document.body.style.opacity = '1', 200);
+      });
+    });
+    // Smooth scroll for Hotlines tab
+    document.getElementById('hotlines-tab')?.addEventListener('click', function (e) {
+      e.preventDefault();
+      const hotlinesSection = document.getElementById('hotcalls');
+
+      if (hotlinesSection) {
+        hotlinesSection.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+
+        // Show animation
+        hotlinesSection.classList.add('visible');
+
+        // Activate hotlines tab
+        document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+        this.closest('.nav-tab').classList.add('active');
+      }
+    });
+
+    // Smooth transitions for page links
+    document.querySelectorAll('.nav-link:not(.scroll-link)').forEach(link => {
+      link.addEventListener('click', function () {
+        document.body.style.opacity = '0.7';
+        setTimeout(() => {
+          document.body.style.opacity = '1';
+        }, 200);
+      });
+    });
+
+    // Update active tab on scroll (optional - for hotlines)
+    window.addEventListener('scroll', function () {
+      const hotlinesSection = document.getElementById('hotcalls');
+      const hotlinesTab = document.getElementById('hotlines-tab');
+
+      if (hotlinesSection && hotlinesTab) {
+        const rect = hotlinesSection.getBoundingClientRect();
+        if (rect.top <= 100 && rect.bottom >= 100) {
+          document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+          hotlinesTab.classList.add('active');
+        }
+      }
+    });
+
+    // Smooth page transitions (optional)
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', function (e) {
+        // Add loading state or animation if desired
+        document.body.style.opacity = '0.7';
+        setTimeout(() => {
+          document.body.style.opacity = '1';
+        }, 200);
+      });
+    });
+
+    // MAP SCROLL - NEW
+    document.querySelector('.nav-tab a[href="index.html"]').addEventListener('click', function (e) {
+      e.preventDefault(); // Prevent page reload
+      const mapSection = document.getElementById('viewer');
+      if (mapSection) {
+        mapSection.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'  // Centers map perfectly
+        });
+        // Activate map tab
+        document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+        this.closest('.nav-tab').classList.add('active');
+      }
+    });
+
+    // SCHEDULE POPUP - Keep existing
+    document.getElementById('schedule-tab')?.addEventListener('click', function (e) {
+      e.preventDefault();
+      document.getElementById('schedule-modal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+
+    // HOTLINES SCROLL - Simplified
+    document.getElementById('hotlines-tab')?.addEventListener('click', function (e) {
+      e.preventDefault();
+      const hotlinesSection = document.getElementById('hotcalls');
+      if (hotlinesSection) {
+        hotlinesSection.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+        document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+        this.closest('.nav-tab').classList.add('active');
+      }
+    });
+
+    // MODAL CLOSE
+    document.getElementById('close-modal')?.addEventListener('click', function () {
+      document.getElementById('schedule-modal').classList.remove('active');
+      document.body.style.overflow = 'auto';
+    });
+
+    // Close modal outside click
+    document.getElementById('schedule-modal')?.addEventListener('click', function (e) {
+      if (e.target === this) {
+        this.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      }
+    });
+
+    // ESCAPE KEY
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        document.getElementById('schedule-modal')?.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      }
+    });
+
+    // SCROLL DETECTION - Active tab updates
+    window.addEventListener('scroll', function () {
+      const mapRect = document.getElementById('viewer')?.getBoundingClientRect();
+      const hotlinesRect = document.getElementById('hotcalls')?.getBoundingClientRect();
+
+      if (mapRect?.top <= window.innerHeight / 2) {
+        document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+        document.querySelector('.nav-tab a[href="index.html"]').closest('.nav-tab')?.classList.add('active');
+      } else if (hotlinesRect?.top <= 100) {
+        document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+        document.getElementById('hotlines-tab')?.classList.add('active');
+      }
+    });
 let scale = 0.04;
 let rotation = 0;
 let posX = 0, posY = 0;
