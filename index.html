@@ -966,7 +966,7 @@ async function loadApp() {
   updateProgress(10, 'Loading map...');
   await new Promise(r => setTimeout(r, 500));
   
-  updateProgress(40, 'Preparing controls...');
+  updateProgress(40, 'Chill ka lang mahina signal...');
   await new Promise(r => setTimeout(r, 400));
   
   // Load map image
@@ -981,7 +981,7 @@ async function loadApp() {
     mapImage.classList.add('loaded');
     continueLoading();
   };
-  img.src = 'capalonga mapjpg'; // Your map file
+  img.src = 'capalonga map.jpg'; // Your map file
 }
 
 async function continueLoading() {
