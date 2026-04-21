@@ -1,29 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Capalonga Guide Map</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-      color: #fff;
-      min-height: 100vh;
-      padding: 16px;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    /* Modal/Popup Styles */
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Capalonga Guide Map</title>
+<style>
+  * { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+    -webkit-tap-highlight-color: transparent;
+  }
+      /* Modal/Popup Styles */
     .modal {
       display: none;
       position: fixed;
@@ -92,14 +80,8 @@
       overflow-y: auto;
     }
 
-    @media (max-width: 800px){
-      body{
-        padding-bottom: 15vh;
-      }
-    }
     /* Small phones */
     @media (max-height: 700px) {
-
       .modal-content {
         width: 98vw;
         height: 92vh;
@@ -337,269 +319,265 @@
         padding-bottom: 20px;
       }
     }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #fff;
+    min-height: 100vh;
+    padding: 16px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 
-    /* FIXED LOADING - SIMPLE & RELIABLE */
-    #loader {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      background: #0f172a;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 1002;
-    }
+  /* FIXED LOADING - SIMPLE & RELIABLE */
+  #loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: #0f172a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1002;
+  }
 
-    .loader-icon img{
-      width: 100px;
-      margin-bottom: 30px;
-      animation: bounce 1.5s infinite;
-    }
+  .loader-icon img{
+    width: 100px;
+    margin-bottom: 30px;
+    animation: bounce 1.5s infinite;
+  }
 
-    @keyframes bounce {
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+  }
 
-      0%,
-      20%,
-      50%,
-      80%,
-      100% {
-        transform: translateY(0);
-      }
+  .progress-container {
+    width: 280px;
+    max-width: 90vw;
+    height: 12px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 25px;
+  }
 
-      40% {
-        transform: translateY(-10px);
-      }
+  .progress-bar {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #10b981);
+    border-radius: 12px;
+    transition: width 0.3s ease;
+  }
 
-      60% {
-        transform: translateY(-5px);
-      }
-    }
+  #progress-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: #f1f5f9;
+  }
 
-    .progress-container {
-      width: 280px;
-      max-width: 90vw;
-      height: 12px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 12px;
-      overflow: hidden;
-      margin-bottom: 25px;
-    }
+  /* HIDE LOADER */
+  #loader.hidden {
+    display: none !important;
+  }
 
-    .progress-bar {
-      width: 0%;
-      height: 100%;
-      background: linear-gradient(90deg, #3b82f6, #10b981);
-      border-radius: 12px;
-      transition: width 0.3s ease;
-    }
+  /* MAIN CONTENT */
+  .container {
+    margin-top: 20px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
 
-    #progress-text {
-      font-size: 16px;
-      font-weight: 600;
-      color: #f1f5f9;
-    }
+  .container.show {
+    opacity: 1;
+  }
 
-    /* HIDE LOADER */
-    #loader.hidden {
-      display: none !important;
-    }
+  .header h1 {
+    font-size: 32px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #3b82f6, #10b981);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+    margin-bottom: 10px;
+  }
 
-    /* MAIN CONTENT */
-    .container {
-      margin-top: 20px;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
+  .viewer {
+    position: relative;
+    width: 100%;
+    height: 65vh;
+    min-height: 420px;
+    border-radius: 24px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.02);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+    backdrop-filter: blur(15px);
+    margin-bottom: 30px;
+    border: 1px solid rgba(255,255,255,0.1);
+    touch-action: none;
+  }
 
-    .container.show {
-      opacity: 1;
-    }
+  .viewer img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    max-width: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    width: auto;
+    height: auto;
+  }
 
-    .header h1 {
-      font-size: 32px;
-      font-weight: 800;
-      background: linear-gradient(135deg, #3b82f6, #10b981);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-align: center;
-      margin-bottom: 10px;
-    }
+  .viewer img.loaded {
+    opacity: 1;
+  }
 
-    .viewer {
-      position: relative;
-      width: 100%;
-      height: 65vh;
-      min-height: 420px;
-      border-radius: 24px;
-      overflow: hidden;
-      background: rgba(255, 255, 255, 0.02);
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(15px);
-      margin-bottom: 30px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      touch-action: none;
-    }
+  /* RESPONSIVE TOOLBAR - WORKS ON ALL MOBILE DEVICES */
+  .toolbar {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(0,0,0,0.92);
+    padding: 12px 16px;
+    border-radius: 24px;
+    backdrop-filter: blur(30px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    z-index: 10;
+    max-width: calc(100vw - 32px);
+    width: fit-content;
+    min-width: 400px;
+  }
 
-    .viewer img {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(1);
-      max-width: none;
-      user-select: none;
-      -webkit-user-drag: none;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      width: auto;
-      height: auto;
-    }
-
-    .viewer img.loaded {
-      opacity: 1;
-    }
-
-    /* RESPONSIVE TOOLBAR - WORKS ON ALL MOBILE DEVICES */
+  /* Small phones (under 360px) */
+  @media (max-width: 360px) {
     .toolbar {
-      position: absolute;
-      bottom: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-      background: rgba(0, 0, 0, 0.92);
-      padding: 12px 16px;
-      border-radius: 24px;
-      backdrop-filter: blur(30px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-      z-index: 10;
-      max-width: calc(100vw - 32px);
-      width: fit-content;
-      min-width: 350px;
+      bottom: 5px;
+      padding: 5px 6px;
+      gap: 6px;
+      border-radius: 20px;
+      min-width: 300px;
     }
+  }
 
-    /* Small phones (under 360px) */
-    @media (max-width: 360px) {
-      .toolbar {
-        bottom: 5px;
-        padding: 5px 6px;
-        gap: 6px;
-        border-radius: 20px;
-        min-width: 300px;
-      }
-    }
-
-    /* Extra small phones */
-    @media (max-width: 320px) {
-      .toolbar {
-        bottom: 10px;
-        padding: 8px 10px;
-        gap: 5px;
-        border-radius: 18px;
-        min-width: 240px;
-      }
-    }
-
-    .toolbar button {
-      flex: 0 0 auto;
-      width: clamp(10px, 5vw, 52px);
-      height: clamp(44px, 5vw, 52px);
-      min-width: 44px;
-      min-height: 44px;
-      max-width: 56px;
-      max-height: 56px;
-      border-radius: 14px;
-      border: none;
-      background: rgba(255, 255, 255, 0.15);
-      color: white;
-      font-size: clamp(20px, 2.5vw, 20px);
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      touch-action: manipulation;
-    }
-
-    /* Smaller buttons on very small screens */
-    @media (max-width: 360px) {
-      .toolbar button {
-        width: clamp(30px, 6.5vw, 600px);
-        height: clamp(30px, 5.5vw, 48px);
-        min-width: 30px;
-        min-height: 30px;
-        border-radius: 12px;
-        font-size: clamp(15px, 2.2vw, 18px);
-      }
-    }
-
-    .toolbar button:active {
-      transform: scale(0.95);
-      background: rgba(255, 255, 255, 0.3);
-    }
-
-    .info-section h2 {
-      font-size: 28px;
-      font-weight: 800;
-      background: linear-gradient(135deg, #3b82f6, #10b981);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .hotline {
-      background: rgba(255, 255, 255, 0.08);
-      padding: 30px 24px;
-      border-radius: 24px;
-      margin: 20px 0;
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-      transition: transform 0.2s ease;
-    }
-
-    .hotline:active {
-      transform: scale(0.99);
-    }
-
-    .hotline b {
-      color: #10b981;
-      font-size: 24px;
-      display: block;
-      margin-bottom: 16px;
-      font-weight: 800;
-    }
-
-    .hotline a {
-      display: block;
-      color: #f59e0b;
-      text-decoration: none;
-      font-size: 24px;
-      font-weight: 700;
-      padding: 18px 24px;
-      margin: 10px 0;
+  /* Extra small phones */
+  @media (max-width: 320px) {
+    .toolbar {
+      bottom: 10px;
+      padding: 8px 10px;
+      gap: 5px;
       border-radius: 18px;
-      background: rgba(245, 158, 11, 0.15);
-      border: 2px solid rgba(245, 158, 11, 0.3);
-      transition: all 0.2s ease;
-      text-align: center;
+      min-width: 240px;
     }
+  }
 
-    .hotline a::before {
-      content: '📞 ';
-    }
+  .toolbar button {
+    flex: 0 0 auto;
+    width: clamp(10px, 5vw, 52px);
+    height: clamp(44px, 5vw, 52px);
+    min-width: 44px;
+    min-height: 44px;
+    max-width: 56px;
+    max-height: 56px;
+    border-radius: 14px;
+    border: none;
+    background: rgba(255,255,255,0.15);
+    color: white;
+    font-size: clamp(20px, 2.5vw, 20px);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+  }
 
-    .hotline a:active {
-      background: rgba(245, 158, 11, 0.3);
-      transform: scale(0.98);
+  /* Smaller buttons on very small screens */
+  @media (max-width: 360px) {
+    .toolbar button {
+      width: clamp(30px, 6.5vw, 600px);
+      height: clamp(30px, 5.5vw, 48px);
+      min-width: 30px;
+      min-height: 30px;
+      border-radius: 12px;
+      font-size: clamp(15px, 2.2vw, 18px);
     }
-    #marquee {
+  }
+
+  .toolbar button:active {
+    transform: scale(0.95);
+    background: rgba(255,255,255,0.3);
+  }
+
+  .info-section h2 {
+    font-size: 28px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #3b82f6, #10b981);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .hotline {
+    background: rgba(255,255,255,0.08);
+    padding: 30px 24px;
+    border-radius: 24px;
+    margin: 20px 0;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    transition: transform 0.2s ease;
+  }
+
+  .hotline:active {
+    transform: scale(0.99);
+  }
+
+  .hotline b {
+    color: #10b981;
+    font-size: 24px;
+    display: block;
+    margin-bottom: 16px;
+    font-weight: 800;
+  }
+
+  .hotline a {
+    display: block;
+    color: #f59e0b;
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: 700;
+    padding: 18px 24px;
+    margin: 10px 0;
+    border-radius: 18px;
+    background: rgba(245,158,11,0.15);
+    border: 2px solid rgba(245,158,11,0.3);
+    transition: all 0.2s ease;
+    text-align: center;
+  }
+
+  .hotline a::before {
+    content: '📞 ';
+  }
+
+  .hotline a:active {
+    background: rgba(245,158,11,0.3);
+    transform: scale(0.98);
+  }
+  #marquee {
     width: 100%;
     overflow: hidden;
     white-space: nowrap;
@@ -610,7 +588,7 @@
     display: inline-block;
     padding-left: 100%;
     animation: scrollText 12s linear infinite;
-    font-size: 20px;
+    font-size: 25px;
     opacity: 0.8;
   }
 
@@ -618,23 +596,23 @@
     0% { transform: translateX(0); }
     100% { transform: translateX(-100%); }
   }
-  .hide{
-    z-index: -1000000;
-    visibility: hidden;
-    pointer-events: none;
-    cursor: default;
-  }
-  </style>
+</style>
 </head>
-
 <body>
   <!-- MARQUEE -->
   <div id="marquee">
-    <span>⚠️ Please be mindful of your surroundings when using the map.</span>
+    <span>⚠️ Please be mindful of your surroundings when using the map. ⚠️</span>
   </div>
-  <div class="hide"><a href="sabang.html"></a><a href="sibol.html"></a><a href="palanas.html"></a></div>
 
-  <!-- Navigation Bar -->
+  <!-- FIXED LOADING SCREEN -->
+  <div id="loader">
+    <div class="loader-icon"><img src="logo glow.png" alt=""></div>
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div id="progressText">0%</div>
+  </div>
+ <!-- Navigation Bar -->
   <nav class="nav-container">
     <ul class="nav-tabs">
       <li class="nav-tab active">
@@ -645,7 +623,7 @@
       </li>
       <li class="nav-tab" id="schedule-tab">
         <a href="#" class="nav-link popup-link">
-          <span class="nav-icon"><img src="calendar.gif" alt="" width="45px"></span>
+          <span class="nav-icon"><img src="calendar.gif" alt="" width="45px" ></span>
           <span class="nav-label">Schedule</span>
         </a>
       </li>
@@ -674,15 +652,6 @@
     </div>
   </div>
 
-  <!-- FIXED LOADING SCREEN -->
-  <div id="loader">
-    <div class="loader-icon"><img src="capalonga logo.png" alt=""></div>
-    <div class="progress-container">
-      <div class="progress-bar" id="progressBar"></div>
-    </div>
-    <div id="progressText">0%</div>
-  </div>
-
   <!-- CONTENT -->
   <div class="container" id="mainContent">
     <div class="header">
@@ -696,7 +665,7 @@
         <button onclick="zoomOut()" title="Zoom Out">-</button>
         <button onclick="rotateLeft()" title="Rotate Left">⟲</button>
         <button onclick="rotateRight()" title="Rotate Right">⟳</button>
-        <button onclick="resetMap()" title="Reset">🗘</button>
+        <button onclick="resetMap()" title="Reset">R</button>
         <button onclick="toggleFull()" title="Fullscreen">⛶</button>
       </div>
     </div>
@@ -704,28 +673,27 @@
     <div class="info-section">
       <h1>🚨 Emergency Hotlines</h1>
       <section id="hotcalls">
-        <div class="hotline">
-          <b>⭐ PNP</b>
-          <a href="tel:+639985985953">0998-598-5953</a>
-        </div>
-
-        <div class="hotline">
-          <b>⚠️ MDRRMO</b>
-          <a href="tel:+639165312484">0916-531-2484</a>
-        </div>
-
-        <div class="hotline">
-          <b>🔥 BFP</b>
-          <a href="tel:+639813946935">0981-394-6935</a>
-          <a href="tel:+639209636935">0920-963-6935</a>
-        </div>
+      <div class="hotline">
+        <b>⭐ PNP</b>
+        <a href="tel:+639985985953">0998-598-5953</a>
+      </div>
+      
+      <div class="hotline">
+        <b>⚠️ MDRRMO</b>
+        <a href="tel:+639165312484">0916-531-2484</a>
+      </div>
+      
+      <div class="hotline">
+        <b>🔥 BFP</b>
+        <a href="tel:+639813946935">0981-394-6935</a>
+        <a href="tel:+639209636935">0920-963-6935</a>
+      </div>
       </section>
     </div>
-
   </div>
 
-  <script>
-    // Modal functionality for Schedule popup
+<script>
+ // Modal functionality for Schedule popup
     const scheduleModal = document.getElementById('schedule-modal');
     const scheduleTab = document.getElementById('schedule-tab');
     const closeModalBtn = document.getElementById('close-modal');
@@ -919,130 +887,124 @@
         document.getElementById('hotlines-tab')?.classList.add('active');
       }
     });
-    let scale = 0.04;
-    let rotation = 0;
-    let posX = 0, posY = 0;
-    let isDragging = false;
-    let startX = 0, startY = 0;
-    let startDistance = 0;
+let scale = 0.04;
+let rotation = 0;
+let posX = 0, posY = 0;
+let isDragging = false;
+let startX = 0, startY = 0;
+let startDistance = 0;
 
-    // MAP CONTROLS
-    function updateMap() {
-      const img = document.getElementById('mapImage');
-      img.style.transform = `translate(-50%, -50%) translate(${posX}px, ${posY}px) scale(${scale}) rotate(${rotation}deg)`;
-    }
+// MAP CONTROLS
+function updateMap() {
+  const img = document.getElementById('mapImage');
+  img.style.transform = `translate(-50%, -50%) translate(${posX}px, ${posY}px) scale(${scale}) rotate(${rotation}deg)`;
+}
 
-    function zoomIn() { scale = Math.min(5, scale * 1.25); updateMap(); }
-    function zoomOut() { scale = Math.max(0.02, scale * 0.8); updateMap(); }
-    function rotateLeft() { rotation = (rotation - 90 + 360) % 360; updateMap(); }
-    function rotateRight() { rotation = (rotation + 90 + 360) % 360; updateMap(); }
-    function resetMap() { scale = 0.04; rotation = 0; posX = 0; posY = 0; updateMap(); }
-    function toggleFull() {
-      const viewer = document.getElementById('viewer');
-      if (!document.fullscreenElement) {
-        viewer.requestFullscreen?.() || viewer.webkitRequestFullscreen?.();
-      } else {
-        document.exitFullscreen?.() || document.webkitExitFullscreen?.();
-      }
-    }
+function zoomIn() { scale = Math.min(5, scale * 1.25); updateMap(); }
+function zoomOut() { scale = Math.max(0.02, scale * 0.8); updateMap(); }
+function rotateLeft() { rotation = (rotation - 90 + 360) % 360; updateMap(); }
+function rotateRight() { rotation = (rotation + 90 + 360) % 360; updateMap(); }
+function resetMap() { scale = 0.04; rotation = 0; posX = 0; posY = 0; updateMap(); }
+function toggleFull() {
+  const viewer = document.getElementById('viewer');
+  if (!document.fullscreenElement) {
+    viewer.requestFullscreen?.() || viewer.webkitRequestFullscreen?.();
+  } else {
+    document.exitFullscreen?.() || document.webkitExitFullscreen?.();
+  }
+}
 
-    // TOUCH CONTROLS
-    const viewer = document.getElementById('viewer');
-    viewer.addEventListener('touchstart', (e) => {
-      if (e.target.closest('.toolbar')) return;
-      if (e.touches.length === 1) {
-        isDragging = true;
-        startX = e.touches[0].clientX - posX;
-        startY = e.touches[0].clientY - posY;
-      } else if (e.touches.length === 2) {
-        const dx = e.touches[0].clientX - e.touches[1].clientX;
-        const dy = e.touches[0].clientY - e.touches[1].clientY;
-        startDistance = Math.sqrt(dx * dx + dy * dy);
-      }
-    }, { passive: true });
+// TOUCH CONTROLS
+const viewer = document.getElementById('viewer');
+viewer.addEventListener('touchstart', (e) => {
+  if (e.target.closest('.toolbar')) return;
+  if (e.touches.length === 1) {
+    isDragging = true;
+    startX = e.touches[0].clientX - posX;
+    startY = e.touches[0].clientY - posY;
+  } else if (e.touches.length === 2) {
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    startDistance = Math.sqrt(dx*dx + dy*dy);
+  }
+}, {passive: true});
 
-    viewer.addEventListener('touchmove', (e) => {
-      if (e.target.closest('.toolbar')) return;
-      e.preventDefault();
+viewer.addEventListener('touchmove', (e) => {
+  if (e.target.closest('.toolbar')) return;
+  e.preventDefault();
+  
+  if (isDragging && e.touches.length === 1) {
+    posX = e.touches[0].clientX - startX;
+    posY = e.touches[0].clientY - startY;
+  } else if (e.touches.length === 2 && startDistance > 0) {
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    const distance = Math.sqrt(dx*dx + dy*dy);
+    const factor = distance / startDistance;
+    scale *= factor;
+    scale = Math.max(0.02, Math.min(5, scale));
+    startDistance = distance;
+  }
+  updateMap();
+}, {passive: false});
 
-      if (isDragging && e.touches.length === 1) {
-        posX = e.touches[0].clientX - startX;
-        posY = e.touches[0].clientY - startY;
-      } else if (e.touches.length === 2 && startDistance > 0) {
-        const dx = e.touches[0].clientX - e.touches[1].clientX;
-        const dy = e.touches[0].clientY - e.touches[1].clientY;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        const factor = distance / startDistance;
-        scale *= factor;
-        scale = Math.max(0.02, Math.min(5, scale));
-        startDistance = distance;
-      }
-      updateMap();
-    }, { passive: false });
+viewer.addEventListener('touchend', () => {
+  isDragging = false;
+  startDistance = 0;
+});
 
-    viewer.addEventListener('touchend', () => {
-      isDragging = false;
-      startDistance = 0;
-    });
+// FIXED LOADING - 100% WORKING
+const progressBar = document.getElementById('progressBar');
+const progressText = document.getElementById('progressText');
+const loader = document.getElementById('loader');
+const mainContent = document.getElementById('mainContent');
+const mapImage = document.getElementById('mapImage');
 
-    // FIXED LOADING - 100% WORKING
-    const progressBar = document.getElementById('progressBar');
-    const progressText = document.getElementById('progressText');
-    const loader = document.getElementById('loader');
-    const mainContent = document.getElementById('mainContent');
-    const mapImage = document.getElementById('mapImage');
+function updateProgress(percent, text) {
+  progressBar.style.width = percent + '%';
+  progressText.textContent = text;
+}
 
-    function updateProgress(percent, text) {
-      progressBar.style.width = percent + '%';
-      progressText.textContent = text;
-    }
+async function loadApp() {
+  updateProgress(10, 'Loading map...');
+  await new Promise(r => setTimeout(r, 500));
+  
+  updateProgress(40, 'Chill ka lang mahina signal...');
+  await new Promise(r => setTimeout(r, 400));
+  
+  // Load map image
+  const img = new Image();
+  img.onload = () => {
+    mapImage.src = img.src;
+    mapImage.classList.add('loaded');
+    continueLoading();
+  };
+  img.onerror = () => {
+    mapImage.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMWUyOTNiIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iI2ZmZiIgZm9udC13ZWlnaHQ9IjciIHRleHQtYW5jaG9yPSJtaWRkbGUiPkNhcGFsb25nYSBNYXAgTG9hZGluZy4uLjwvdGV4dD48L3N2Zz4=';
+    mapImage.classList.add('loaded');
+    continueLoading();
+  };
+  img.src = 'NEW_capalonga_map.jpg'; // Your map file
+}
 
-    async function loadApp() {
-      updateProgress(10, 'Loading map...');
-      await new Promise(r => setTimeout(r, 500));
+async function continueLoading() {
+  updateProgress(70, 'Activating hotlines...');
+  await new Promise(r => setTimeout(r, 400));
+  
+  updateProgress(95, 'Ready!');
+  await new Promise(r => setTimeout(r, 300));
+  
+  updateProgress(100, 'Capalonga Map Active! 🗺️');
+  await new Promise(r => setTimeout(r, 500));
+  
+  // HIDE LOADER
+  loader.classList.add('hidden');
+  mainContent.classList.add('show');
+}
 
-      updateProgress(40, 'Preparing controls...');
-      await new Promise(r => setTimeout(r, 400));
-
-      // Load map image with guaranteed fallback
-      let loadingDone = false;
-
-      function finishImageLoad(src) {
-        if (loadingDone) return;
-        loadingDone = true;
-        mapImage.src = src;
-        mapImage.classList.add('loaded');
-        continueLoading();
-      }
-
-      const img = new Image();
-      img.onload = () => finishImageLoad(img.src);
-      img.onerror = () => finishImageLoad('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMWUyOTNiIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iI2ZmZiIgZm9udC13ZWlnaHQ9IjciIHRleHQtYW5jaG9yPSJtaWRkbGUiPkNhcGFsb25nYSBNYXA8L3RleHQ+PC9zdmc+');
-      img.src = 'NEW_capalonga_map.jpg'; // Your map file
-
-      // Safety timeout: if image doesn't load/error within 5s, proceed anyway
-      setTimeout(() => finishImageLoad('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMWUyOTNiIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iI2ZmZiIgZm9udC13ZWlnaHQ9IjciIHRleHQtYW5jaG9yPSJtaWRkbGUiPkNhcGFsb25nYSBNYXA8L3RleHQ+PC9zdmc+'), 5000);
-    }
-
-    async function continueLoading() {
-      updateProgress(70, 'Activating hotlines...');
-      await new Promise(r => setTimeout(r, 400));
-
-      updateProgress(95, 'Ready!');
-      await new Promise(r => setTimeout(r, 300));
-
-      updateProgress(100, 'Capalonga Map Active! 🗺️');
-      await new Promise(r => setTimeout(r, 500));
-
-      // HIDE LOADER
-      loader.classList.add('hidden');
-      mainContent.classList.add('show');
-    }
-
-    // START APP
-    updateMap();
-    loadApp();
-  </script>
+// START APP
+updateMap();
+loadApp();
+</script>
 </body>
-
 </html>
