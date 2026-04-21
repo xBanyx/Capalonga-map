@@ -596,9 +596,19 @@
     0% { transform: translateX(0); }
     100% { transform: translateX(-100%); }
   }
+@media (max-width: 500px) {
+      body{
+        padding-bottom: 15vh;
+      }
+      }
+      .hide{
+        z-index: -100000;
+        visibility: hidden;
+      }
 </style>
 </head>
 <body>
+  <div class="hide"><a href="sibol"></a><a href="palanas"></a><a href="sabang"></a></div>
   <!-- MARQUEE -->
   <div id="marquee">
     <span>⚠️ Please be mindful of your surroundings when using the map. ⚠️</span>
@@ -606,7 +616,7 @@
 
   <!-- FIXED LOADING SCREEN -->
   <div id="loader">
-    <div class="loader-icon"><img src="logo glow.png" alt=""></div>
+    <div class="loader-icon"><img src="logo_glow.png" alt=""></div>
     <div class="progress-container">
       <div class="progress-bar" id="progressBar"></div>
     </div>
