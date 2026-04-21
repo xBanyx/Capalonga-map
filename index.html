@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -22,67 +23,371 @@
       -webkit-overflow-scrolling: touch;
     }
 
-    @media (max-width: 800px) {
-      body { padding-bottom: 15vh; }
-    }
-
-    /* MARQUEE */
-    #marquee {
+    /* Modal/Popup Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
-      overflow: hidden;
-      white-space: nowrap;
-      margin-bottom: 10px;
-    }
-    #marquee span {
-      display: inline-block;
-      padding-left: 100%;
-      animation: scrollText 12s linear infinite;
-      font-size: 20px;
-      opacity: 0.8;
-    }
-    @keyframes scrollText {
-      0%   { transform: translateX(0); }
-      100% { transform: translateX(-100%); }
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
 
-    /* HIDDEN LINKS */
-    .hide {
-      visibility: hidden;
-      pointer-events: none;
+    .modal.active {
+      display: block;
+      opacity: 1;
+    }
+
+    /* SCROLLABLE MODAL */
+    .modal-content {
       position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      max-width: 95vw;
+      max-height: 95vh;
+      width: 95vw;
+      height: 85vh;
+      max-height: 650px;
+      /* ✅ Taller for scroll */
+      background: rgb(255, 255, 255);
+      border-radius: 24px;
+      overflow-y: auto;
+      /* ✅ VERTICAL SCROLL */
+      -webkit-overflow-scrolling: touch;
+      /* ✅ iOS smooth */
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex;
+      flex-direction: column;
     }
 
-    /* LOADER */
+    .modal.active .modal-content {
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    /* Image stays responsive */
+    .schedule-image {
+      width: 100%;
+      height: 50vh;
+      /* Fixed height */
+      max-height: 350px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      flex-shrink: 0;
+      /* ✅ Don't shrink image */
+    }
+
+    /* Scrollable content area */
+    .modal-body {
+      flex: 1;
+      /* ✅ Takes remaining space */
+      padding: 0 24px 24px;
+      overflow-y: auto;
+    }
+
+    @media (max-width: 800px){
+      body{
+        padding-bottom: 15vh;
+      }
+    }
+    /* Small phones */
+    @media (max-height: 700px) {
+
+      .modal-content {
+        width: 98vw;
+        height: 92vh;
+      }
+
+      .schedule-image {
+        height: 40vh;
+      }
+    }
+
+    .modal-header {
+      padding: 24px 24px 0;
+    }
+
+    .modal-title {
+      position: sticky;
+      font-size: 24px;
+      font-weight: 700;
+      color: #1C1C1E;
+      margin-bottom: 8px;
+    }
+
+    .modal-description {
+      color: #6E6E73;
+      font-size: 16px;
+      margin-bottom: 24px;
+    }
+
+    .modal-close {
+      position: fixed;
+      /* ✅ FIXED - always on top */
+      top: 20px;
+      right: 20px;
+      z-index: 2001;
+      /* ✅ Above modal content */
+      background: rgba(0, 0, 0, 0.7);
+      border: none;
+      font-size: 28px;
+      color: white;
+      cursor: pointer;
+      padding: 12px 16px;
+      border-radius: 50%;
+      transition: all 0.2s ease;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-close:hover {
+      background: rgba(0, 0, 0, 0.9);
+      transform: scale(1.1);
+    }
+
+    .modal-close:active {
+      transform: scale(0.95);
+    }
+
+    /* Navigation Styles - FIXED & ENHANCED */
+    .nav-container {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      /* Safari support */
+      box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.12);
+      z-index: 1000;
+      padding: 16px 12px;
+      /* Increased padding */
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .nav-tabs {
+      display: flex;
+      justify-content: space-around;
+      max-width: 420px;
+      /* Slightly smaller for better fit */
+      margin: 0 auto;
+      list-style: none;
+      padding: 0 8px;
+      /* Small side padding */
+      gap: 8px;
+      /* Space between tabs */
+    }
+
+    .nav-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      padding: 12px 8px;
+      /* Reduced horizontal padding */
+      min-height: 60px;
+      /* Consistent height */
+      color: #757577;
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      /* Bouncy animation */
+      border-radius: 20px;
+      /* Larger radius */
+      cursor: pointer;
+      position: relative;
+      max-width: none;
+      /* Remove max-width constraint */
+      touch-action: manipulation;
+      /* Better mobile touch */
+    }
+
+    .nav-tab:hover {
+      color: #007AFF;
+      background: rgba(0, 122, 255, 0.12);
+      transform: translateY(-3px);
+    }
+
+    .nav-tab:active {
+      transform: translateY(-1px) scale(0.98);
+      /* Press effect */
+    }
+
+    .nav-icon {
+      font-size: 26px;
+      /* Slightly larger */
+      margin-bottom: 4px;
+      line-height: 1;
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      flex-shrink: 0;
+    }
+
+    .nav-tab:hover .nav-icon {
+      transform: scale(1.15);
+    }
+
+    .nav-tab.active .nav-icon {
+      transform: scale(1.2);
+    }
+
+    .nav-label {
+      font-size: 11px;
+      /* Slightly larger */
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-align: center;
+      line-height: 1.2;
+      opacity: 0.9;
+      transition: opacity 0.2s ease;
+    }
+
+    .nav-tab:hover .nav-label {
+      opacity: 1;
+    }
+
+
+
+    .nav-tab.active .nav-label {
+      opacity: 1;
+    }
+
+
+
+    /* Responsive improvements */
+    @media (max-width: 480px) {
+      .nav-tabs {
+        max-width: 380px;
+        gap: 6px;
+      }
+
+      .nav-tab {
+        padding: 10px 6px;
+        min-height: 56px;
+      }
+
+      .nav-icon {
+        font-size: 24px;
+      }
+
+      .nav-label {
+        font-size: 10px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .nav-container {
+        position: relative;
+        bottom: auto;
+        max-width: 420px;
+        margin: 40px auto 0;
+        border-radius: 28px;
+        padding: 20px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      .nav-tabs {
+        gap: 12px;
+      }
+    }
+
+    /* Prevent text clipping */
+    .nav-tab a {
+      color: inherit;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Haptic feedback for mobile */
+    @media (hover: none) and (pointer: coarse) {
+      .nav-tab:active {
+        background: rgba(0, 122, 255, 0.25);
+      }
+    }
+
+    .page-content {
+      padding-bottom: 110px;
+      padding-top: 20px;
+    }
+
+    @media (min-width: 768px) {
+      .nav-container {
+        position: relative;
+        bottom: auto;
+        max-width: 400px;
+        margin: 40px auto 0;
+        border-radius: 24px;
+      }
+
+      .page-content {
+        padding-bottom: 20px;
+      }
+    }
+
+    /* FIXED LOADING - SIMPLE & RELIABLE */
     #loader {
       position: fixed;
-      inset: 0;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
       background: #0f172a;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      z-index: 9999;
+      z-index: 1002;
     }
-    #loader.hidden { display: none !important; }
-    .loader-icon img {
+
+    .loader-icon img{
       width: 100px;
       margin-bottom: 30px;
       animation: bounce 1.5s infinite;
     }
+
     @keyframes bounce {
-      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-      40%  { transform: translateY(-10px); }
-      60%  { transform: translateY(-5px); }
+
+      0%,
+      20%,
+      50%,
+      80%,
+      100% {
+        transform: translateY(0);
+      }
+
+      40% {
+        transform: translateY(-10px);
+      }
+
+      60% {
+        transform: translateY(-5px);
+      }
     }
+
     .progress-container {
       width: 280px;
       max-width: 90vw;
       height: 12px;
-      background: rgba(255,255,255,0.2);
+      background: rgba(255, 255, 255, 0.2);
       border-radius: 12px;
       overflow: hidden;
       margin-bottom: 25px;
     }
+
     .progress-bar {
       width: 0%;
       height: 100%;
@@ -90,10 +395,16 @@
       border-radius: 12px;
       transition: width 0.3s ease;
     }
-    #progressText {
+
+    #progress-text {
       font-size: 16px;
       font-weight: 600;
       color: #f1f5f9;
+    }
+
+    /* HIDE LOADER */
+    #loader.hidden {
+      display: none !important;
     }
 
     /* MAIN CONTENT */
@@ -102,7 +413,10 @@
       opacity: 0;
       transition: opacity 0.4s ease;
     }
-    .container.show { opacity: 1; }
+
+    .container.show {
+      opacity: 1;
+    }
 
     .header h1 {
       font-size: 32px;
@@ -114,7 +428,6 @@
       margin-bottom: 10px;
     }
 
-    /* MAP VIEWER */
     .viewer {
       position: relative;
       width: 100%;
@@ -122,13 +435,14 @@
       min-height: 420px;
       border-radius: 24px;
       overflow: hidden;
-      background: rgba(255,255,255,0.02);
-      box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+      background: rgba(255, 255, 255, 0.02);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
       backdrop-filter: blur(15px);
       margin-bottom: 30px;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       touch-action: none;
     }
+
     .viewer img {
       position: absolute;
       top: 50%;
@@ -142,9 +456,12 @@
       width: auto;
       height: auto;
     }
-    .viewer img.loaded { opacity: 1; }
 
-    /* TOOLBAR */
+    .viewer img.loaded {
+      opacity: 1;
+    }
+
+    /* RESPONSIVE TOOLBAR - WORKS ON ALL MOBILE DEVICES */
     .toolbar {
       position: absolute;
       bottom: 16px;
@@ -154,33 +471,52 @@
       flex-wrap: wrap;
       justify-content: center;
       gap: 8px;
-      background: rgba(0,0,0,0.92);
+      background: rgba(0, 0, 0, 0.92);
       padding: 12px 16px;
       border-radius: 24px;
       backdrop-filter: blur(30px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
       z-index: 10;
       max-width: calc(100vw - 32px);
       width: fit-content;
       min-width: 350px;
     }
+
+    /* Small phones (under 360px) */
     @media (max-width: 360px) {
-      .toolbar { bottom: 5px; padding: 5px 6px; gap: 6px; border-radius: 20px; min-width: 300px; }
+      .toolbar {
+        bottom: 5px;
+        padding: 5px 6px;
+        gap: 6px;
+        border-radius: 20px;
+        min-width: 300px;
+      }
     }
+
+    /* Extra small phones */
     @media (max-width: 320px) {
-      .toolbar { bottom: 10px; padding: 8px 10px; gap: 5px; border-radius: 18px; min-width: 240px; }
+      .toolbar {
+        bottom: 10px;
+        padding: 8px 10px;
+        gap: 5px;
+        border-radius: 18px;
+        min-width: 240px;
+      }
     }
+
     .toolbar button {
       flex: 0 0 auto;
-      width: clamp(44px, 5vw, 52px);
+      width: clamp(10px, 5vw, 52px);
       height: clamp(44px, 5vw, 52px);
-      min-width: 44px; min-height: 44px;
-      max-width: 56px; max-height: 56px;
+      min-width: 44px;
+      min-height: 44px;
+      max-width: 56px;
+      max-height: 56px;
       border-radius: 14px;
       border: none;
-      background: rgba(255,255,255,0.15);
+      background: rgba(255, 255, 255, 0.15);
       color: white;
-      font-size: clamp(18px, 2.5vw, 22px);
+      font-size: clamp(20px, 2.5vw, 20px);
       font-weight: 700;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -189,19 +525,25 @@
       justify-content: center;
       touch-action: manipulation;
     }
+
+    /* Smaller buttons on very small screens */
     @media (max-width: 360px) {
       .toolbar button {
-        width: clamp(30px, 6.5vw, 44px);
-        height: clamp(30px, 5.5vw, 44px);
-        min-width: 30px; min-height: 30px;
+        width: clamp(30px, 6.5vw, 600px);
+        height: clamp(30px, 5.5vw, 48px);
+        min-width: 30px;
+        min-height: 30px;
         border-radius: 12px;
         font-size: clamp(15px, 2.2vw, 18px);
       }
     }
-    .toolbar button:active { transform: scale(0.95); background: rgba(255,255,255,0.3); }
 
-    /* HOTLINES */
-    .info-section h1 {
+    .toolbar button:active {
+      transform: scale(0.95);
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .info-section h2 {
       font-size: 28px;
       font-weight: 800;
       background: linear-gradient(135deg, #3b82f6, #10b981);
@@ -210,18 +552,30 @@
       text-align: center;
       margin-bottom: 30px;
     }
+
     .hotline {
-      background: rgba(255,255,255,0.08);
+      background: rgba(255, 255, 255, 0.08);
       padding: 30px 24px;
       border-radius: 24px;
       margin: 20px 0;
       backdrop-filter: blur(20px);
-      border: 1px solid rgba(255,255,255,0.1);
-      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
       transition: transform 0.2s ease;
     }
-    .hotline:active { transform: scale(0.99); }
-    .hotline b { color: #10b981; font-size: 24px; display: block; margin-bottom: 16px; font-weight: 800; }
+
+    .hotline:active {
+      transform: scale(0.99);
+    }
+
+    .hotline b {
+      color: #10b981;
+      font-size: 24px;
+      display: block;
+      margin-bottom: 16px;
+      font-weight: 800;
+    }
+
     .hotline a {
       display: block;
       color: #f59e0b;
@@ -231,184 +585,80 @@
       padding: 18px 24px;
       margin: 10px 0;
       border-radius: 18px;
-      background: rgba(245,158,11,0.15);
-      border: 2px solid rgba(245,158,11,0.3);
+      background: rgba(245, 158, 11, 0.15);
+      border: 2px solid rgba(245, 158, 11, 0.3);
       transition: all 0.2s ease;
       text-align: center;
     }
-    .hotline a::before { content: '📞 '; }
-    .hotline a:active { background: rgba(245,158,11,0.3); transform: scale(0.98); }
 
-    /* NAVIGATION */
-    .nav-container {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      background: rgba(255,255,255,0.98);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      box-shadow: 0 -8px 32px rgba(0,0,0,0.12);
-      z-index: 1000;
-      padding: 16px 12px;
-      border-top: 1px solid rgba(255,255,255,0.2);
-    }
-    .nav-tabs {
-      display: flex;
-      justify-content: space-around;
-      max-width: 420px;
-      margin: 0 auto;
-      list-style: none;
-      padding: 0 8px;
-      gap: 8px;
-    }
-    .nav-tab {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      flex: 1;
-      padding: 12px 8px;
-      min-height: 60px;
-      color: #757577;
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      border-radius: 20px;
-      cursor: pointer;
-      touch-action: manipulation;
-    }
-    .nav-tab a {
-      color: inherit;
-      text-decoration: none;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-      height: 100%;
-    }
-    .nav-tab:hover { color: #007AFF; background: rgba(0,122,255,0.12); transform: translateY(-3px); }
-    .nav-tab:active { transform: translateY(-1px) scale(0.98); }
-    .nav-icon { font-size: 26px; margin-bottom: 4px; line-height: 1; transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1); flex-shrink: 0; }
-    .nav-tab:hover .nav-icon,
-    .nav-tab.active .nav-icon { transform: scale(1.2); }
-    .nav-label { font-size: 11px; font-weight: 600; letter-spacing: 0.02em; text-align: center; line-height: 1.2; opacity: 0.9; }
-    .nav-tab.active .nav-label,
-    .nav-tab:hover .nav-label { opacity: 1; }
-
-    @media (max-width: 480px) {
-      .nav-tabs { max-width: 380px; gap: 6px; }
-      .nav-tab { padding: 10px 6px; min-height: 56px; }
-      .nav-icon { font-size: 24px; }
-      .nav-label { font-size: 10px; }
-    }
-    @media (hover: none) and (pointer: coarse) {
-      .nav-tab:active { background: rgba(0,122,255,0.25); }
-    }
-    @media (min-width: 768px) {
-      .nav-container {
-        position: relative;
-        bottom: auto;
-        max-width: 420px;
-        margin: 40px auto 0;
-        border-radius: 28px;
-        padding: 20px;
-        box-shadow: 0 12px 40px rgba(0,0,0,0.15);
-      }
-      .nav-tabs { gap: 12px; }
+    .hotline a::before {
+      content: '📞 ';
     }
 
-    /* MODAL */
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.8);
-      backdrop-filter: blur(8px);
-      z-index: 2000;
-      opacity: 0;
-      transition: opacity 0.3s ease;
+    .hotline a:active {
+      background: rgba(245, 158, 11, 0.3);
+      transform: scale(0.98);
     }
-    .modal.active { display: block; opacity: 1; }
-    .modal-content {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%) scale(0.8);
-      width: 95vw;
-      height: 85vh;
-      max-height: 650px;
-      background: #fff;
-      border-radius: 24px;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      display: flex;
-      flex-direction: column;
-    }
-    .modal.active .modal-content { transform: translate(-50%, -50%) scale(1); }
-    @media (max-height: 700px) {
-      .modal-content { width: 98vw; height: 92vh; }
-    }
-    .modal-close {
-      position: fixed;
-      top: 20px; right: 20px;
-      z-index: 2001;
-      background: rgba(0,0,0,0.7);
-      border: none;
-      font-size: 28px;
-      color: white;
-      cursor: pointer;
-      border-radius: 50%;
-      transition: all 0.2s ease;
-      width: 48px; height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .modal-close:hover { background: rgba(0,0,0,0.9); transform: scale(1.1); }
-    .modal-close:active { transform: scale(0.95); }
-    .modal-header { padding: 24px 24px 0; }
-    .modal-title { font-size: 24px; font-weight: 700; color: #1C1C1E; margin-bottom: 8px; }
-    .modal-description { color: #6E6E73; font-size: 16px; margin-bottom: 24px; }
-    .schedule-image { width: 100%; height: auto; display: block; }
+    #marquee {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-bottom: 10px;
+  }
+
+  #marquee span {
+    display: inline-block;
+    padding-left: 100%;
+    animation: scrollText 12s linear infinite;
+    font-size: 20px;
+    opacity: 0.8;
+  }
+
+  @keyframes scrollText {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+  }
+  .hide{
+    z-index: -1000000;
+    visibility: hidden;
+    pointer-events: none;
+    cursor: default;
+  }
   </style>
 </head>
-<body>
 
+<body>
   <!-- MARQUEE -->
   <div id="marquee">
     <span>⚠️ Please be mindful of your surroundings when using the map.</span>
   </div>
+  <div class="hide"><a href="sabang.html"></a><a href="sibol.html"></a><a href="palanas.html"></a></div>
 
-  <!-- Hidden preload links -->
-  <div class="hide">
-    <a href="sabang.html"></a>
-    <a href="sibol.html"></a>
-    <a href="palanas.html"></a>
-  </div>
-
-  <!-- Navigation -->
+  <!-- Navigation Bar -->
   <nav class="nav-container">
     <ul class="nav-tabs">
-      <li class="nav-tab active" id="map-tab">
-        <a href="#viewer" class="nav-link">
-          <span class="nav-icon"><img src="map.gif" alt="" width="45"></span>
+      <li class="nav-tab active">
+        <a href="index.html" class="nav-link">
+          <span class="nav-icon"><img src="map.gif" alt="" width="45px" ></span>
           <span class="nav-label">Map</span>
         </a>
       </li>
       <li class="nav-tab" id="schedule-tab">
-        <a href="#" class="nav-link">
-          <span class="nav-icon"><img src="calendar.gif" alt="" width="45"></span>
+        <a href="#" class="nav-link popup-link">
+          <span class="nav-icon"><img src="calendar.gif" alt="" width="45px"></span>
           <span class="nav-label">Schedule</span>
         </a>
       </li>
       <li class="nav-tab" id="hotlines-tab">
-        <a href="#hotcalls" class="nav-link">
-          <span class="nav-icon"><img src="hotline.gif" alt="" width="45"></span>
+        <a href="#hotcalls" class="nav-link scroll-link">
+          <span class="nav-icon"><img src="hotline.gif" alt="" width="45px" ></span>
           <span class="nav-label">Hotlines</span>
         </a>
       </li>
     </ul>
   </nav>
 
-  <!-- Schedule Modal -->
+  <!-- Schedule Popup Modal -->
   <div id="schedule-modal" class="modal">
     <div class="modal-content">
       <button class="modal-close" id="close-modal">&times;</button>
@@ -416,20 +666,24 @@
         <h2 class="modal-title">📅 Mass Schedule</h2>
         <p class="modal-description">Ito ang mga Schedule ng Misa sa Fiesta</p>
       </div>
-      <img src="schedule.jpg" alt="Mass Schedule" class="schedule-image">
+      <img src="schedule.jpg" alt="">
+      <!--<img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" 
+             alt="Schedule Calendar" class="schedule-image" 
+             onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPlNjaGVkdWxlIEltYWdlPC90ZXh0Pjwvc3ZnPg=='">
+    -->
     </div>
   </div>
 
-  <!-- LOADER -->
+  <!-- FIXED LOADING SCREEN -->
   <div id="loader">
-    <div class="loader-icon"><img src="logo_glow.png" alt="Capalonga Logo"></div>
+    <div class="loader-icon"><img src="capalonga logo.png" alt=""></div>
     <div class="progress-container">
       <div class="progress-bar" id="progressBar"></div>
     </div>
-    <div id="progressText">Loading...</div>
+    <div id="progressText">0%</div>
   </div>
 
-  <!-- MAIN CONTENT -->
+  <!-- CONTENT -->
   <div class="container" id="mainContent">
     <div class="header">
       <h1>Capalonga Guide Map</h1>
@@ -438,11 +692,11 @@
     <div class="viewer" id="viewer">
       <img id="mapImage" alt="Capalonga Guide Map">
       <div class="toolbar">
-        <button onclick="zoomIn()"     title="Zoom In">+</button>
-        <button onclick="zoomOut()"    title="Zoom Out">−</button>
+        <button onclick="zoomIn()" title="Zoom In">+</button>
+        <button onclick="zoomOut()" title="Zoom Out">-</button>
         <button onclick="rotateLeft()" title="Rotate Left">⟲</button>
-        <button onclick="rotateRight()"title="Rotate Right">⟳</button>
-        <button onclick="resetMap()"   title="Reset">🗘</button>
+        <button onclick="rotateRight()" title="Rotate Right">⟳</button>
+        <button onclick="resetMap()" title="Reset">🗘</button>
         <button onclick="toggleFull()" title="Fullscreen">⛶</button>
       </div>
     </div>
@@ -454,10 +708,12 @@
           <b>⭐ PNP</b>
           <a href="tel:+639985985953">0998-598-5953</a>
         </div>
+
         <div class="hotline">
           <b>⚠️ MDRRMO</b>
           <a href="tel:+639165312484">0916-531-2484</a>
         </div>
+
         <div class="hotline">
           <b>🔥 BFP</b>
           <a href="tel:+639813946935">0981-394-6935</a>
@@ -465,32 +721,232 @@
         </div>
       </section>
     </div>
+
   </div>
 
   <script>
-    // ── MAP STATE ──
-    let scale = 0.04, rotation = 0, posX = 0, posY = 0;
-    let isDragging = false, startX = 0, startY = 0, startDistance = 0;
+    // Modal functionality for Schedule popup
+    const scheduleModal = document.getElementById('schedule-modal');
+    const scheduleTab = document.getElementById('schedule-tab');
+    const closeModalBtn = document.getElementById('close-modal');
 
+    scheduleTab?.addEventListener('click', function (e) {
+      e.preventDefault();
+      scheduleModal.classList.add('active');
+      document.body.style.overflow = 'hidden'; // Prevent background scroll
+    });
+
+    closeModalBtn?.addEventListener('click', function () {
+      scheduleModal.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    });
+
+    // Close modal when clicking outside
+    scheduleModal?.addEventListener('click', function (e) {
+      if (e.target === this) {
+        scheduleModal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && scheduleModal.classList.contains('active')) {
+        scheduleModal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      }
+    });
+
+    // Highlight active tab based on current URL
+    document.addEventListener('DOMContentLoaded', function () {
+      const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+      const navLinks = document.querySelectorAll('.nav-link');
+
+      navLinks.forEach(link => {
+        const linkPath = link.getAttribute('href');
+        const parentTab = link.closest('.nav-tab');
+
+        if (linkPath === currentPath) {
+          parentTab.classList.add('active');
+        } else {
+          parentTab.classList.remove('active');
+        }
+      });
+    });
+
+    // Hotlines smooth scroll
+    document.getElementById('hotlines-tab')?.addEventListener('click', function (e) {
+      e.preventDefault();
+      const hotlinesSection = document.getElementById('hotcalls');
+      if (hotlinesSection) {
+        hotlinesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        hotlinesSection.classList.add('visible');
+        document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+        this.closest('.nav-tab').classList.add('active');
+      }
+    });
+
+    // Page link transitions (only for Map)
+    document.querySelectorAll('.nav-link[href$=".html"]').forEach(link => {
+      link.addEventListener('click', function () {
+        document.body.style.opacity = '0.7';
+        setTimeout(() => document.body.style.opacity = '1', 200);
+      });
+    });
+    // Smooth scroll for Hotlines tab
+    document.getElementById('hotlines-tab')?.addEventListener('click', function (e) {
+      e.preventDefault();
+      const hotlinesSection = document.getElementById('hotcalls');
+
+      if (hotlinesSection) {
+        hotlinesSection.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+
+        // Show animation
+        hotlinesSection.classList.add('visible');
+
+        // Activate hotlines tab
+        document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+        this.closest('.nav-tab').classList.add('active');
+      }
+    });
+
+    // Smooth transitions for page links
+    document.querySelectorAll('.nav-link:not(.scroll-link)').forEach(link => {
+      link.addEventListener('click', function () {
+        document.body.style.opacity = '0.7';
+        setTimeout(() => {
+          document.body.style.opacity = '1';
+        }, 200);
+      });
+    });
+
+    // Update active tab on scroll (optional - for hotlines)
+    window.addEventListener('scroll', function () {
+      const hotlinesSection = document.getElementById('hotcalls');
+      const hotlinesTab = document.getElementById('hotlines-tab');
+
+      if (hotlinesSection && hotlinesTab) {
+        const rect = hotlinesSection.getBoundingClientRect();
+        if (rect.top <= 100 && rect.bottom >= 100) {
+          document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+          hotlinesTab.classList.add('active');
+        }
+      }
+    });
+
+    // Smooth page transitions (optional)
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', function (e) {
+        // Add loading state or animation if desired
+        document.body.style.opacity = '0.7';
+        setTimeout(() => {
+          document.body.style.opacity = '1';
+        }, 200);
+      });
+    });
+
+    // MAP SCROLL - NEW
+    document.querySelector('.nav-tab a[href="index.html"]').addEventListener('click', function (e) {
+      e.preventDefault(); // Prevent page reload
+      const mapSection = document.getElementById('viewer');
+      if (mapSection) {
+        mapSection.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'  // Centers map perfectly
+        });
+        // Activate map tab
+        document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+        this.closest('.nav-tab').classList.add('active');
+      }
+    });
+
+    // SCHEDULE POPUP - Keep existing
+    document.getElementById('schedule-tab')?.addEventListener('click', function (e) {
+      e.preventDefault();
+      document.getElementById('schedule-modal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+
+    // HOTLINES SCROLL - Simplified
+    document.getElementById('hotlines-tab')?.addEventListener('click', function (e) {
+      e.preventDefault();
+      const hotlinesSection = document.getElementById('hotcalls');
+      if (hotlinesSection) {
+        hotlinesSection.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+        document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+        this.closest('.nav-tab').classList.add('active');
+      }
+    });
+
+    // MODAL CLOSE
+    document.getElementById('close-modal')?.addEventListener('click', function () {
+      document.getElementById('schedule-modal').classList.remove('active');
+      document.body.style.overflow = 'auto';
+    });
+
+    // Close modal outside click
+    document.getElementById('schedule-modal')?.addEventListener('click', function (e) {
+      if (e.target === this) {
+        this.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      }
+    });
+
+    // ESCAPE KEY
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        document.getElementById('schedule-modal')?.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      }
+    });
+
+    // SCROLL DETECTION - Active tab updates
+    window.addEventListener('scroll', function () {
+      const mapRect = document.getElementById('viewer')?.getBoundingClientRect();
+      const hotlinesRect = document.getElementById('hotcalls')?.getBoundingClientRect();
+
+      if (mapRect?.top <= window.innerHeight / 2) {
+        document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+        document.querySelector('.nav-tab a[href="index.html"]').closest('.nav-tab')?.classList.add('active');
+      } else if (hotlinesRect?.top <= 100) {
+        document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+        document.getElementById('hotlines-tab')?.classList.add('active');
+      }
+    });
+    let scale = 0.04;
+    let rotation = 0;
+    let posX = 0, posY = 0;
+    let isDragging = false;
+    let startX = 0, startY = 0;
+    let startDistance = 0;
+
+    // MAP CONTROLS
     function updateMap() {
-      document.getElementById('mapImage').style.transform =
-        `translate(-50%, -50%) translate(${posX}px, ${posY}px) scale(${scale}) rotate(${rotation}deg)`;
+      const img = document.getElementById('mapImage');
+      img.style.transform = `translate(-50%, -50%) translate(${posX}px, ${posY}px) scale(${scale}) rotate(${rotation}deg)`;
     }
-    function zoomIn()      { scale = Math.min(5, scale * 1.25); updateMap(); }
-    function zoomOut()     { scale = Math.max(0.02, scale * 0.8); updateMap(); }
-    function rotateLeft()  { rotation = (rotation - 90 + 360) % 360; updateMap(); }
-    function rotateRight() { rotation = (rotation + 90) % 360; updateMap(); }
-    function resetMap()    { scale = 0.04; rotation = 0; posX = 0; posY = 0; updateMap(); }
+
+    function zoomIn() { scale = Math.min(5, scale * 1.25); updateMap(); }
+    function zoomOut() { scale = Math.max(0.02, scale * 0.8); updateMap(); }
+    function rotateLeft() { rotation = (rotation - 90 + 360) % 360; updateMap(); }
+    function rotateRight() { rotation = (rotation + 90 + 360) % 360; updateMap(); }
+    function resetMap() { scale = 0.04; rotation = 0; posX = 0; posY = 0; updateMap(); }
     function toggleFull() {
-      const v = document.getElementById('viewer');
+      const viewer = document.getElementById('viewer');
       if (!document.fullscreenElement) {
-        (v.requestFullscreen || v.webkitRequestFullscreen).call(v);
+        viewer.requestFullscreen?.() || viewer.webkitRequestFullscreen?.();
       } else {
-        (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+        document.exitFullscreen?.() || document.webkitExitFullscreen?.();
       }
     }
 
-    // ── TOUCH CONTROLS ──
+    // TOUCH CONTROLS
     const viewer = document.getElementById('viewer');
     viewer.addEventListener('touchstart', (e) => {
       if (e.target.closest('.toolbar')) return;
@@ -501,126 +957,92 @@
       } else if (e.touches.length === 2) {
         const dx = e.touches[0].clientX - e.touches[1].clientX;
         const dy = e.touches[0].clientY - e.touches[1].clientY;
-        startDistance = Math.hypot(dx, dy);
+        startDistance = Math.sqrt(dx * dx + dy * dy);
       }
     }, { passive: true });
 
     viewer.addEventListener('touchmove', (e) => {
       if (e.target.closest('.toolbar')) return;
       e.preventDefault();
+
       if (isDragging && e.touches.length === 1) {
         posX = e.touches[0].clientX - startX;
         posY = e.touches[0].clientY - startY;
       } else if (e.touches.length === 2 && startDistance > 0) {
         const dx = e.touches[0].clientX - e.touches[1].clientX;
         const dy = e.touches[0].clientY - e.touches[1].clientY;
-        const dist = Math.hypot(dx, dy);
-        scale = Math.max(0.02, Math.min(5, scale * (dist / startDistance)));
-        startDistance = dist;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const factor = distance / startDistance;
+        scale *= factor;
+        scale = Math.max(0.02, Math.min(5, scale));
+        startDistance = distance;
       }
       updateMap();
     }, { passive: false });
 
-    viewer.addEventListener('touchend', () => { isDragging = false; startDistance = 0; });
+    viewer.addEventListener('touchend', () => {
+      isDragging = false;
+      startDistance = 0;
+    });
 
-    // ── LOADING ──
-    const progressBar  = document.getElementById('progressBar');
+    // FIXED LOADING - 100% WORKING
+    const progressBar = document.getElementById('progressBar');
     const progressText = document.getElementById('progressText');
-    const loader       = document.getElementById('loader');
-    const mainContent  = document.getElementById('mainContent');
-    const mapImage     = document.getElementById('mapImage');
+    const loader = document.getElementById('loader');
+    const mainContent = document.getElementById('mainContent');
+    const mapImage = document.getElementById('mapImage');
 
-    const FALLBACK = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMWUyOTNiIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkNhcGFsb25nYSBNYXA8L3RleHQ+PC9zdmc+';
-
-    function setProgress(pct, text) {
-      progressBar.style.width = pct + '%';
+    function updateProgress(percent, text) {
+      progressBar.style.width = percent + '%';
       progressText.textContent = text;
     }
-    function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
 
     async function loadApp() {
-      setProgress(10, 'Loading map...');
-      await delay(500);
-      setProgress(40, 'Preparing controls...');
-      await delay(400);
+      updateProgress(10, 'Loading map...');
+      await new Promise(r => setTimeout(r, 500));
 
-      let done = false;
-      function finish(src) {
-        if (done) return;
-        done = true;
+      updateProgress(40, 'Preparing controls...');
+      await new Promise(r => setTimeout(r, 400));
+
+      // Load map image with guaranteed fallback
+      let loadingDone = false;
+
+      function finishImageLoad(src) {
+        if (loadingDone) return;
+        loadingDone = true;
         mapImage.src = src;
         mapImage.classList.add('loaded');
         continueLoading();
       }
 
       const img = new Image();
-      img.onload  = () => finish(img.src);
-      img.onerror = () => finish(FALLBACK);
-      img.src = 'capalonga map1';
-      setTimeout(() => finish(FALLBACK), 5000); // never get stuck
+      img.onload = () => finishImageLoad(img.src);
+      img.onerror = () => finishImageLoad('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMWUyOTNiIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iI2ZmZiIgZm9udC13ZWlnaHQ9IjciIHRleHQtYW5jaG9yPSJtaWRkbGUiPkNhcGFsb25nYSBNYXA8L3RleHQ+PC9zdmc+');
+      img.src = 'NEW_capalonga_map.jpg'; // Your map file
+
+      // Safety timeout: if image doesn't load/error within 5s, proceed anyway
+      setTimeout(() => finishImageLoad('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMWUyOTNiIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iI2ZmZiIgZm9udC13ZWlnaHQ9IjciIHRleHQtYW5jaG9yPSJtaWRkbGUiPkNhcGFsb25nYSBNYXA8L3RleHQ+PC9zdmc+'), 5000);
     }
 
     async function continueLoading() {
-      setProgress(70, 'Activating hotlines...');
-      await delay(400);
-      setProgress(95, 'Almost ready...');
-      await delay(300);
-      setProgress(100, 'Capalonga Map Active! 🗺️');
-      await delay(500);
+      updateProgress(70, 'Activating hotlines...');
+      await new Promise(r => setTimeout(r, 400));
+
+      updateProgress(95, 'Ready!');
+      await new Promise(r => setTimeout(r, 300));
+
+      updateProgress(100, 'Capalonga Map Active! 🗺️');
+      await new Promise(r => setTimeout(r, 500));
+
+      // HIDE LOADER
       loader.classList.add('hidden');
       mainContent.classList.add('show');
     }
 
-    // ── NAVIGATION ──
-    function setActiveTab(el) {
-      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-      el.classList.add('active');
-    }
-
-    document.getElementById('map-tab').addEventListener('click', function(e) {
-      e.preventDefault();
-      document.getElementById('viewer').scrollIntoView({ behavior: 'smooth', block: 'center' });
-      setActiveTab(this);
-    });
-
-    document.getElementById('schedule-tab').addEventListener('click', function(e) {
-      e.preventDefault();
-      document.getElementById('schedule-modal').classList.add('active');
-      document.body.style.overflow = 'hidden';
-      setActiveTab(this);
-    });
-
-    document.getElementById('hotlines-tab').addEventListener('click', function(e) {
-      e.preventDefault();
-      document.getElementById('hotcalls').scrollIntoView({ behavior: 'smooth', block: 'start' });
-      setActiveTab(this);
-    });
-
-    // ── MODAL CLOSE ──
-    function closeModal() {
-      document.getElementById('schedule-modal').classList.remove('active');
-      document.body.style.overflow = 'auto';
-    }
-    document.getElementById('close-modal').addEventListener('click', closeModal);
-    document.getElementById('schedule-modal').addEventListener('click', function(e) {
-      if (e.target === this) closeModal();
-    });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
-    // ── SCROLL: update active tab ──
-    window.addEventListener('scroll', function() {
-      const hotRect = document.getElementById('hotcalls')?.getBoundingClientRect();
-      const mapRect = document.getElementById('viewer')?.getBoundingClientRect();
-      if (hotRect && hotRect.top <= 150 && hotRect.bottom >= 0) {
-        setActiveTab(document.getElementById('hotlines-tab'));
-      } else if (mapRect && mapRect.top <= window.innerHeight / 2 && mapRect.bottom >= 0) {
-        setActiveTab(document.getElementById('map-tab'));
-      }
-    });
-
-    // ── START ──
+    // START APP
     updateMap();
     loadApp();
   </script>
 </body>
+
 </html>
